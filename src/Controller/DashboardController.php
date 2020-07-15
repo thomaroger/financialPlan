@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
+
 
 class DashboardController extends AbstractController
 {
@@ -15,6 +17,10 @@ class DashboardController extends AbstractController
      */
     public function dashboard()
     {
-        return $this->render('dashboard/index.html.twig', []);
+        $users = [];
+        $users = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findActivesUsers();
+        return $this->render('dashboard/index.html.twig', ['users' => count($users)]);
     }
 }
