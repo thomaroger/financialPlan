@@ -26,6 +26,8 @@ class UserFixtures extends Fixture
              'troger'
          ));
         $user->setActive(true);
+        $user->setFirstname("Thomas");
+        $user->setLastname("ROGER");
         $user->setRoles(['ROLE_USER']);
         $manager->persist($user);
 
@@ -35,6 +37,8 @@ class UserFixtures extends Fixture
              $user2,
              'aroger'
          ));
+        $user2->setFirstname("Aurélie");
+        $user2->setLastname("ROGER");
         $user2->setActive(true);
         $user2->setRoles(['ROLE_USER']);
         $manager->persist($user2);
