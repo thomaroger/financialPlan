@@ -26,8 +26,18 @@ class UserFixtures extends Fixture
              'troger'
          ));
         $user->setActive(true);
-
+        $user->setRoles(['ROLE_USER']);
         $manager->persist($user);
+
+        $user2 = new User();
+        $user2->setEmail('laporte.aurelie91@gmail.com');
+        $user2->setPassword($this->passwordEncoder->encodePassword(
+             $user2,
+             'aroger'
+         ));
+        $user2->setActive(true);
+        $user2->setRoles(['ROLE_USER']);
+        $manager->persist($user2);
         $manager->flush();
     }
 }
