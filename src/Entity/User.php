@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -48,6 +50,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $active = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Thrift::class, mappedBy="user")
+     */
+    private $thrifts;
+
+    public function __construct()
+    {
+        $this->thrifts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -164,5 +176,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Thrift[]
+     */
+    public function getThrifts(): Collection
+    {
+        return $this->thrifts;
+    }
+
+    public function addThrift(Thrift $thrift): self
+    {
+        if (!$this->thrifts->contains($thrift)) {
+            $this->thrifts[] = $thrift;
+            $thrift->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeThrift(Thrift $thrift): self
+    {
+        if ($this->thrifts->contains($thrift)) {
+            $this->thrifts->removeElement($thrift);
+            // set the owning side to null (unless already changed)
+            if ($thrift->getUser() === $this) {
+                $thrift->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

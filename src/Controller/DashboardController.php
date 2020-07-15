@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Entity\Thrift;
 
 
 class DashboardController extends AbstractController
@@ -21,6 +22,15 @@ class DashboardController extends AbstractController
         $users = $this->getDoctrine()
             ->getRepository(User::class)
             ->findActivesUsers();
-        return $this->render('dashboard/index.html.twig', ['users' => count($users)]);
+        $thrifts = [];
+        $thrifts = $this->getDoctrine()
+            ->getRepository(Thrift::class)
+            ->findAll();
+        return $this->render('dashboard/index.html.twig', 
+            [
+                'users' => count($users),
+                'thrifts' => count($thrifts),
+            ]
+        );
     }
 }
