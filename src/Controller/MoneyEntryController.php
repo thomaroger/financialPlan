@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +16,8 @@ class MoneyEntryController extends AbstractController
      */
     public function index()
     {
+        $request = Request::createFromGlobals();
+
         $users = [];
         $monthsWithYear = [];
         $months = [];
@@ -25,18 +26,22 @@ class MoneyEntryController extends AbstractController
         $entries = [];
         $count = [];
 
+        if(!empty($request->query->get('year'))) {
+            $yearSelected = $request->query->get('year');
+        }
+
         $users = $this->getDoctrine()
             ->getRepository(User::class)
             ->findActivesUsers();
         
         setlocale(LC_TIME, 'fr_FR');
         for($i=1; $i<=12; $i++){
-          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, $year))).' '.$year;
+          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, $year)));
           $months[$i] = ucfirst(strftime("%B", mktime(0, 0, 0, $i, $year)));
         }
 
         for($i=0; $i<=3; $i++){
-          $year[$i] = date('Y')+$i;
+          $years[$i] = date('Y')+$i;
         }
 
         $forecastMoneyEntryInstances = $this->getDoctrine()
@@ -44,7 +49,7 @@ class MoneyEntryController extends AbstractController
             ->findAll();
 
         foreach ($forecastMoneyEntryInstances as $forecastMoneyEntryInstance) {
-            $entries[$forecastMoneyEntryInstance->getForecastMoneyEntry()->getName()][$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = $forecastMoneyEntryInstance->getPrice();
+            $entries[$forecastMoneyEntryInstance->getForecastMoneyEntry()->getID()." - ".$forecastMoneyEntryInstance->getForecastMoneyEntry()->getName()][$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = $forecastMoneyEntryInstance->getPrice();
 
             if (empty($count[$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()])) {
                 $count[$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = 0;
@@ -57,7 +62,7 @@ class MoneyEntryController extends AbstractController
              'monthsWithYear' => $monthsWithYear,
              'months' => $months,
              'yearSelected' => $yearSelected,
-             'years' => $year,
+             'years' => $years,
              'entries' => $entries,
              'count' => $count,
         ]);

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Plan Financier - Prévisionnel - Entrées{% endblock %}
+{% block title %}Plan Financier - Prévisionnel - Dépenses{% endblock %}
 {% block body %}
 
 <div class="clearfix"> &nbsp; </div>
@@ -8,10 +8,9 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{path('app_dashboard')}}">Dashboard</a></li>
     <li class="breadcrumb-item" aria-current="page">Prévisionnel</li>
-    <li class="breadcrumb-item active" aria-current="page">Entrées</li>
+    <li class="breadcrumb-item active" aria-current="page">Dépenses</li>
   </ol>
 </nav>
-
 <div class="clearfix"> &nbsp; </div>
 
 <div class="container"> 
@@ -28,9 +27,9 @@
   </form>
 </div>
 </div>
-
 <div class="clearfix"> &nbsp; </div>
 
+<div class="container"> 
    <table class="table table-hover text-center">
       <thead>
         <tr>
@@ -41,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for name, entry in entries %}
+        {% for name, entry in expenses %}
           <tr>
           <th scope="row">{{name}}</th>
             {% for key,month in months %}
@@ -77,25 +76,14 @@
 <div class="container"> 
     <div class="card">
         <div class="card-header">
-                Ajouter une entrée
+                Ajouter une dépense
         </div>
         <div class="clearfix"> &nbsp; </div>
         <div class="card-body">
-          <form method="POST" action="{{path('app_money_entry_add')}}">
+          <form method="POST" action="{{path('app_expenses_add')}}">
             <div class="form-group col">
-              <label for="exampleInputEmail1">Nom de l'entrée : </label>
-              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom de l'entrée" required="required" name="name">
-            </div>
-            <div class="form-group col">
-                 <div class="input-group-prepend">
-                    <label for="inputGroupSelect01">Utilisateur : </label>
-                  </div>
-                  <select class="custom-select" id="inputGroupSelect01" name="user">
-                    <option value="0" selected>Choisir un utilisateur </option>
-                    {% for user in users %}
-                    <option value="{{ user.id}} ">{{user.firstname}} {{user.lastname}} </option>
-                    {% endfor %}
-                  </select>
+              <label for="exampleInputEmail1">Nom de la dépense : </label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom de la dépense" required="required" name="name">
             </div>
             <div class="form-group col">
               <label for="exampleInputPassword1">Prix : </label>
@@ -111,7 +99,7 @@
           <div class="container"> 
     <div class="card">
         <div class="card-header">
-                Tempolarité de l'entrée
+                Tempolarité de la dépense
         </div>
         <div class="clearfix"> &nbsp; </div>
         <div class="card-body">
@@ -130,7 +118,7 @@
             </div>
             <div class="form-group">
                  <div class="input-group-prepend">
-                    <label for="inputGroupSelect02">Mois de début de l'entrée : </label>
+                    <label for="inputGroupSelect02">Mois de début de la dépense : </label>
                   </div>
                   <select class="custom-select" id="inputGroupSelect02" name="begin_month">
                     <option value="0" selected>Choisir un mois </option>
@@ -142,7 +130,7 @@
 
             <div class="form-group">
                  <div class="input-group-prepend">
-                    <label for="inputGroupSelect03">Année de début de l'entrée : </label>
+                    <label for="inputGroupSelect03">Année de début de la dépense : </label>
                   </div>
                   <select class="custom-select" id="inputGroupSelect03" name="begin_year">
                     <option value="0" selected>Choisir une année </option>
@@ -162,7 +150,7 @@
           <div class="col">
             <div class="form-group">
                  <div class="input-group-prepend">
-                    <label for="inputGroupSelect04">Mois de l'entrée : </label>
+                    <label for="inputGroupSelect04">Mois de la dépense : </label>
                   </div>
                   <select class="custom-select" id="inputGroupSelect04" name="month">
                     <option value="0" selected>Choisir un mois </option>
@@ -174,7 +162,7 @@
 
             <div class="form-group">
                  <div class="input-group-prepend">
-                    <label for="inputGroupSelect05">Année de l'entrée : </label>
+                    <label for="inputGroupSelect05">Année de la dépense : </label>
                   </div>
                   <select class="custom-select" id="inputGroupSelect05" name="year">
                     <option value="0" selected>Choisir une année </option>

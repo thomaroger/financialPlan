@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\Thrift;
 use App\Entity\ForecastMoneyEntryInstance;
+use App\Entity\ForecastMoneyExpenseInstance;
 
 
 class DashboardController extends AbstractController
@@ -32,11 +33,17 @@ class DashboardController extends AbstractController
             ->getRepository(ForecastMoneyEntryInstance::class)
             ->findByMonthAndYear(date('m'), date('Y'));
 
+        $forecastExpense = $this->getDoctrine()
+            ->getRepository(ForecastMoneyExpenseInstance::class)
+            ->findByMonthAndYear(date('m'), date('Y'));
+
         return $this->render('dashboard/index.html.twig', 
             [
                 'users' => count($users),
                 'thrifts' => count($thrifts),
-                'forecastEntry' => $forecastEntry[0][1]
+                'forecastEntry' => $forecastEntry[0][1],
+                'forecastExpense' => $forecastExpense[0][1],
+                'forecastDiff' => $forecastEntry[0][1] - $forecastExpense[0][1],
             ]
         );
     }

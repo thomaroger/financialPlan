@@ -36,18 +36,22 @@
                         Dépenses du mois courant (juillet)
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">5 000 € </h5>
-                        <a href="#" class="btn btn-primary">Vers Dépenses</a>
+                        <h5 class="card-title"> {{forecastExpense|format_currency('EUR', locale='en')}} </h5>
+                        <a href="{{path('app_expenses')}}" class="btn btn-primary">Vers Dépenses</a>
                     </div>
                 </div>
             </div>
             <div class="col"> 
-                <div class="card text-center text-white bg-success">
+                {% set status="success" %}
+                {% if forecastDiff < 0 %}
+                    {% set status="danger" %}
+                {% endif %}
+                <div class="card text-center text-white bg-{{status}}">
                     <div class="card-header">
                         Différence (juillet)
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title"> + 1 000 €</h5>
+                        <h5 class="card-title"> {{forecastDiff|format_currency('EUR', locale='en')}}</h5>
                         <a href="#" class="btn btn-primary">Vers Résumé</a>
                     </div>
                 </div>
