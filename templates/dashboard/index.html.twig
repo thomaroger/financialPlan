@@ -25,8 +25,8 @@
                         Entrées du mois courant (juillet)
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">6 000 € </h5>
-                        <a href="#" class="btn btn-primary">Vers Entrées</a>
+                        <h5 class="card-title"> {{forecastEntry|format_currency('EUR', locale='en')}} </h5>
+                        <a href="{{path('app_money_entry')}}" class="btn btn-primary">Vers Entrées</a>
                     </div>
                 </div>
             </div>

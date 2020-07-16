@@ -56,9 +56,15 @@ class User implements UserInterface
      */
     private $thrifts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ForecastMoneyEntry::class, mappedBy="user")
+     */
+    private $forecastMoneyEntries;
+
     public function __construct()
     {
         $this->thrifts = new ArrayCollection();
+        $this->forecastMoneyEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,6 +209,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($thrift->getUser() === $this) {
                 $thrift->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForecastMoneyEntry[]
+     */
+    public function getForecastMoneyEntries(): Collection
+    {
+        return $this->forecastMoneyEntries;
+    }
+
+    public function addForecastMoneyEntry(ForecastMoneyEntry $forecastMoneyEntry): self
+    {
+        if (!$this->forecastMoneyEntries->contains($forecastMoneyEntry)) {
+            $this->forecastMoneyEntries[] = $forecastMoneyEntry;
+            $forecastMoneyEntry->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForecastMoneyEntry(ForecastMoneyEntry $forecastMoneyEntry): self
+    {
+        if ($this->forecastMoneyEntries->contains($forecastMoneyEntry)) {
+            $this->forecastMoneyEntries->removeElement($forecastMoneyEntry);
+            // set the owning side to null (unless already changed)
+            if ($forecastMoneyEntry->getUser() === $this) {
+                $forecastMoneyEntry->setUser(null);
             }
         }
 

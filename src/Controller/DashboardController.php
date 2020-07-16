@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\Thrift;
+use App\Entity\ForecastMoneyEntryInstance;
 
 
 class DashboardController extends AbstractController
@@ -26,10 +27,16 @@ class DashboardController extends AbstractController
         $thrifts = $this->getDoctrine()
             ->getRepository(Thrift::class)
             ->findAll();
+
+        $forecastEntry = $this->getDoctrine()
+            ->getRepository(ForecastMoneyEntryInstance::class)
+            ->findByMonthAndYear(date('m'), date('Y'));
+
         return $this->render('dashboard/index.html.twig', 
             [
                 'users' => count($users),
                 'thrifts' => count($thrifts),
+                'forecastEntry' => $forecastEntry[0][1]
             ]
         );
     }

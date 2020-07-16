@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plan Financier - Prévisionnel - Entrées{% endblock %}
+{% block body %}
+
+<div class="clearfix"> &nbsp; </div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{path('app_dashboard')}}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Prévisionnel</li>
+    <li class="breadcrumb-item active" aria-current="page">Entrées</li>
+  </ol>
+</nav>
+
+<div class="clearfix"> &nbsp; </div>
+
+<div class="container"> 
+   <table class="table table-hover text-center">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          {% for month in monthsWithYear %}
+             <th scope="col">{{month}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, entry in entries %}
+          <tr>
+          <th scope="row">{{name}}</th>
+            {% for key,month in months %}
+              <td>
+              {% if entry[yearSelected][key] is defined %}
+                {{ entry[yearSelected][key]|format_currency('EUR', locale='en') }} 
+              {% else %}
+                0
+              {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+       <thead>
+        <tr>
+          <th scope="col">Total</th>
+          {% for key,month in months %}
+              <th scope="col">
+              {% if count[yearSelected][key] is defined %}
+                {{ count[yearSelected][key]|format_currency('EUR', locale='en') }} 
+              {% else %}
+                0
+              {% endif %}
+              </th>
+            {% endfor %}
+        </tr>
+  </thead>
+  </table>
+</div>
+<div class="clearfix"> &nbsp; </div>
+
+<div class="container"> 
+    <div class="card">
+        <div class="card-header">
+                Ajouter une entrée
+        </div>
+        <div class="clearfix"> &nbsp; </div>
+        <div class="card-body">
+          <form method="POST" action="{{path('app_money_entry_add')}}">
+            <div class="form-group col">
+              <label for="exampleInputEmail1">Nom de l'entrée : </label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom de l'entrée" required="required" name="name">
+            </div>
+            <div class="form-group col">
+                 <div class="input-group-prepend">
+                    <label for="inputGroupSelect01">Utilisateur : </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect01" name="user">
+                    <option value="0" selected>Choisir un utilisateur </option>
+                    {% for user in users %}
+                    <option value="{{ user.id}} ">{{user.firstname}} {{user.lastname}} </option>
+                    {% endfor %}
+                  </select>
+            </div>
+            <div class="form-group col">
+              <label for="exampleInputPassword1">Prix : </label>
+              <div class="input-group">
+              <input id="exampleInputPassword1" type="decimal" class="form-control" placeholder="Prix (1234.34)"  name="price">
+              <div class="input-group-append">
+                <span class="input-group-text">€</span>
+                <span class="input-group-text">0.00</span>
+              </div>
+            </div>
+            </div>
+
+          <div class="container"> 
+    <div class="card">
+        <div class="card-header">
+                Tempolarité de l'entrée
+        </div>
+        <div class="clearfix"> &nbsp; </div>
+        <div class="card-body">
+<div class="container"> 
+
+        <div class="row">
+          <div class="col">
+
+            <div class="card">
+        <div class="card-body">
+
+          <div class="col">
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1" value="1" name="recurrent">
+              <label class="form-check-label" for="exampleCheck1">Recurrent ?</label>
+            </div>
+            <div class="form-group">
+                 <div class="input-group-prepend">
+                    <label for="inputGroupSelect02">Mois de début de l'entrée : </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect02" name="begin_month">
+                    <option value="0" selected>Choisir un mois </option>
+                    {% for index,month in months %}
+                    <option value="{{index}} ">{{month}} </option>
+                    {% endfor %}
+                  </select>
+            </div>
+
+            <div class="form-group">
+                 <div class="input-group-prepend">
+                    <label for="inputGroupSelect03">Année de début de l'entrée : </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect03" name="begin_year">
+                    <option value="0" selected>Choisir une année </option>
+                    {% for year in years %}
+                    <option value="{{year}} ">{{year}} </option>
+                    {% endfor %}
+                  </select>
+              </div>
+        </div>
+</div>
+</div>
+</div>
+          <div class="col">
+
+ <div class="card">
+        <div class="card-body">
+          <div class="col">
+            <div class="form-group">
+                 <div class="input-group-prepend">
+                    <label for="inputGroupSelect04">Mois de l'entrée : </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect04" name="month">
+                    <option value="0" selected>Choisir un mois </option>
+                    {% for index,month in months %}
+                    <option value="{{index}} ">{{month}} </option>
+                    {% endfor %}
+                  </select>
+            </div>
+
+            <div class="form-group">
+                 <div class="input-group-prepend">
+                    <label for="inputGroupSelect05">Année de l'entrée : </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect05" name="year">
+                    <option value="0" selected>Choisir une année </option>
+                    {% for year in years %}
+                    <option value="{{year}} ">{{year}} </option>
+                    {% endfor %}
+                  </select>
+              </div>
+          </div>
+      </div>
+      </div>
+
+        </div>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="clearfix"> &nbsp; </div>
+
+            <div class="col">
+            <div class="float-right"> 
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+          </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
