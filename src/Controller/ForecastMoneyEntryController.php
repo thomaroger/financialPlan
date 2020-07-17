@@ -9,10 +9,10 @@ use App\Entity\ForecastMoneyEntry;
 use App\Entity\ForecastMoneyEntryInstance;
 
 
-class MoneyEntryController extends AbstractController
+class ForecastMoneyEntryController extends AbstractController
 {
     /**
-     * @Route("/money/entry", name="app_money_entry")
+     * @Route("/forecast/money/entry", name="app_money_entry")
      */
     public function index()
     {
@@ -36,8 +36,8 @@ class MoneyEntryController extends AbstractController
         
         setlocale(LC_TIME, 'fr_FR');
         for($i=1; $i<=12; $i++){
-          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, $year)));
-          $months[$i] = ucfirst(strftime("%B", mktime(0, 0, 0, $i, $year)));
+          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, 1, $year)));
+          $months[$i] = ucfirst(strftime("%B", mktime(0, 0, 0, $i, 1,$year)));
         }
 
         for($i=0; $i<=3; $i++){
@@ -49,7 +49,8 @@ class MoneyEntryController extends AbstractController
             ->findAll();
 
         foreach ($forecastMoneyEntryInstances as $forecastMoneyEntryInstance) {
-            $entries[$forecastMoneyEntryInstance->getForecastMoneyEntry()->getID()." - ".$forecastMoneyEntryInstance->getForecastMoneyEntry()->getName()][$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = $forecastMoneyEntryInstance->getPrice();
+            $entries[$forecastMoneyEntryInstance->getForecastMoneyEntry()->getID()][$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = $forecastMoneyEntryInstance->getPrice();
+            $entries[$forecastMoneyEntryInstance->getForecastMoneyEntry()->getID()]['name'] = $forecastMoneyEntryInstance->getForecastMoneyEntry()->getName();
 
             if (empty($count[$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()])) {
                 $count[$forecastMoneyEntryInstance->getYear()][$forecastMoneyEntryInstance->getMonth()] = 0;
@@ -69,7 +70,7 @@ class MoneyEntryController extends AbstractController
     }
 
      /**
-     * @Route("/money/entry/add", name="app_money_entry_add")
+     * @Route("/forecast/money/entry/add", name="app_money_entry_add")
      */
     public function add()
     {

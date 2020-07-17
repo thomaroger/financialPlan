@@ -9,10 +9,10 @@ use App\Entity\User;
 use App\Entity\ForecastMoneyExpense;
 use App\Entity\ForecastMoneyExpenseInstance;
 
-class MoneyExpensesController extends AbstractController
+class ForecastMoneyExpensesController extends AbstractController
 {
     /**
-     * @Route("/money/expenses", name="app_expenses")
+     * @Route("/forecast/money/expenses", name="app_expenses")
      */
     public function index()
     {
@@ -31,8 +31,8 @@ class MoneyExpensesController extends AbstractController
 
         setlocale(LC_TIME, 'fr_FR');
         for($i=1; $i<=12; $i++){
-          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, $year)));
-          $months[$i] = ucfirst(strftime("%B", mktime(0, 0, 0, $i, $year)));
+          $monthsWithYear[$i] = ucfirst(strftime("%b", mktime(0, 0, 0, $i, 1, $year)));
+          $months[$i] = ucfirst(strftime("%B", mktime(0, 0, 0, $i, 1, $year)));
         }
 
         for($i=0; $i<=3; $i++){
@@ -44,7 +44,8 @@ class MoneyExpensesController extends AbstractController
             ->findAll();
 
         foreach ($forecastMoneyExpenseInstances as $forecastMoneyExpenseInstance) {
-            $expenses[$forecastMoneyExpenseInstance->getForecastMoneyExpense()->getID()."-".$forecastMoneyExpenseInstance->getForecastMoneyExpense()->getName()][$forecastMoneyExpenseInstance->getYear()][$forecastMoneyExpenseInstance->getMonth()] = $forecastMoneyExpenseInstance->getPrice();
+            $expenses[$forecastMoneyExpenseInstance->getForecastMoneyExpense()->getID()][$forecastMoneyExpenseInstance->getYear()][$forecastMoneyExpenseInstance->getMonth()] = $forecastMoneyExpenseInstance->getPrice();
+            $expenses[$forecastMoneyExpenseInstance->getForecastMoneyExpense()->getID()]['name'] = $forecastMoneyExpenseInstance->getForecastMoneyExpense()->getName();
 
             if (empty($count[$forecastMoneyExpenseInstance->getYear()][$forecastMoneyExpenseInstance->getMonth()])) {
                 $count[$forecastMoneyExpenseInstance->getYear()][$forecastMoneyExpenseInstance->getMonth()] = 0;
@@ -64,7 +65,7 @@ class MoneyExpensesController extends AbstractController
 
 
     /**
-     * @Route("/money/expenses/add", name="app_expenses_add")
+     * @Route("/forecast//money/expenses/add", name="app_expenses_add")
      */
     public function add()
     {

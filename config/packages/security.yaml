@@ -39,6 +39,7 @@ security:
         - { path: '^/dashboard', roles: ROLE_USER }
         - { path: '^/user', roles: ROLE_USER }
         - { path: '^/thrift', roles: ROLE_USER }
+        - { path: '^/forecast', roles: ROLE_USER }
 
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plan Financier - Prévisionnel - Résumé{% endblock %}
+{% block body %}
+
+<div class="clearfix"> &nbsp; </div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{path('app_dashboard')}}">Dashboard</a></li>
+    <li class="breadcrumb-item" aria-current="page">Prévisionnel</li>
+    <li class="breadcrumb-item active" aria-current="page">Résumé</li>
+  </ol>
+</nav>
+<div class="clearfix"> &nbsp; </div>
+</div>
+
+<div class="container"> 
+  <div class="row float-right">
+  <form method="GET" class="form-inline">
+   <div class="input-group">
+      <select class="custom-select mb-2 mr-sm-2" id="inputGroupSelect05" name="year">
+        {% for year in years %}
+        <option value="{{year}}" {% if year==yearSelected %} selected {% endif %} >{{year}} </option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success mb-2 mr-sm-2">Changer</button>
+  </form>
+</div>
+</div>
+<div class="clearfix"> &nbsp; </div>
+
+   <table class="table table-hover text-center">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          {% for month in monthsWithYear[yearSelected] %}
+             <th scope="col">{{month}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+          <th scope="row">Entrées</th>
+            {% for entry in entries[yearSelected]  %}
+              <td>
+                {{entry|format_currency('EUR', locale='en')}}
+              </td>
+              {% endfor %}
+          </tr>
+          <tr>
+          <th scope="row">Dépenses</th>
+             {% for expense in expenses[yearSelected]  %}
+              <td>
+                {{expense|format_currency('EUR', locale='en')}}
+              </td>
+              {% endfor %}
+          </tr>
+      </tbody>
+       <thead>
+        <tr>
+          <th scope="col">Total</th>
+          {% for diff in diffs[yearSelected] %}
+               {% set status="success" %}
+                {% if diff < 0 %}
+                    {% set status="danger" %}
+                {% endif %}
+              <th class="text-{{status}}">
+                {{diff|format_currency('EUR', locale='en')}}
+              </th>
+              {% endfor %}
+        </tr>
+         <tbody>
+          <tr>
+          <th scope="row">Epargnes</th>
+            {% for thrift in thrifts[yearSelected] %}
+              <td>
+                {{thrift|format_currency('EUR', locale='en')}}
+              </td>
+              {% endfor %}
+          </tr>
+          <tr>
+          <th scope="row">Epargnes disponibles</th>
+             {% for availableThrift in availableThrifts[yearSelected]  %}
+              <td>
+                {{availableThrift|format_currency('EUR', locale='en')}}
+              </td>
+              {% endfor %}
+          </tr>
+      </tbody>
+  </thead>
+  </table>
+<div class="clearfix"> &nbsp; </div>
+
+{% endblock %}
+
+

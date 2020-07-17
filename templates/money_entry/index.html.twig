@@ -11,7 +11,7 @@
     <li class="breadcrumb-item active" aria-current="page">Entrées</li>
   </ol>
 </nav>
-
+</div>
 <div class="clearfix"> &nbsp; </div>
 
 <div class="container"> 
@@ -30,7 +30,7 @@
 </div>
 
 <div class="clearfix"> &nbsp; </div>
-
+</div>
    <table class="table table-hover text-center">
       <thead>
         <tr>
@@ -41,9 +41,9 @@
         </tr>
       </thead>
       <tbody>
-        {% for name, entry in entries %}
+        {% for key, entry in entries %}
           <tr>
-          <th scope="row">{{name}}</th>
+          <th scope="row">{{entry.name}}</th>
             {% for key,month in months %}
               <td>
               {% if entry[yearSelected][key] is defined %}

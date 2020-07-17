@@ -27,9 +27,9 @@
   </form>
 </div>
 </div>
-<div class="clearfix"> &nbsp; </div>
+</div>
 
-<div class="container"> 
+<div class="clearfix"> &nbsp; </div>
    <table class="table table-hover text-center">
       <thead>
         <tr>
@@ -42,7 +42,7 @@
       <tbody>
         {% for name, entry in expenses %}
           <tr>
-          <th scope="row">{{name}}</th>
+          <th scope="row">{{entry.name}}</th>
             {% for key,month in months %}
               <td>
               {% if entry[yearSelected][key] is defined %}

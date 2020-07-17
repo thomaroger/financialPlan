@@ -28,7 +28,7 @@
                   <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prévisionnel<span class="caret"></span></a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="">Résumé</a>
+                      <a class="dropdown-item" href="{{path('app_forecast_summary')}}">Résumé</a>
                       <a class="dropdown-item" href="{{path('app_money_entry')}}">Entrées</a>
                       <a class="dropdown-item" href="{{path('app_expenses')}}">Dépenses</a>
                     </div>
@@ -51,10 +51,7 @@
           </div><!-- /.container-fluid -->
         </nav>
         <div class="container" id="top">
-          <div class="col-md-12">
         {% block body %}{% endblock %}
-
-     </div>
         </div>
         <div class="card" style="position: fixed;bottom: 0;right: 0;z-index: 1000;overflow-x: hidden;overflow-y: auto;margin: 15px">
             <a href="#top" class="card-link list-group-item-action" id="toTop">
