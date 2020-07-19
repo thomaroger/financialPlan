@@ -18,4 +18,17 @@ class ForecastMoneyExpenseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ForecastMoneyExpense::class);
     }
+
+    /**
+      * @return ForecastMoneyEnxpense Returns a object of ForecastMoneyEnxpense or null
+     */
+    public function findOneByID($value): ?ForecastMoneyExpense
+    {
+        return $this->createQueryBuilder('fme')
+            ->andWhere('fme.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

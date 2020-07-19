@@ -43,4 +43,15 @@ class ForecastMoneyExpenseInstanceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+      * @return ForecastMoneyExpenseInstances[] Returns an array of User objects
+     */
+    public function findByForecastMoneyExpense($id) : array {
+        return $this->createQueryBuilder('fmei')
+            ->andWhere('fmei.forecastMoneyExpense = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+    }
 }

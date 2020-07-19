@@ -30,6 +30,7 @@ class ForecastSummaryController extends AbstractController
         $availableThrifts = [];
         $lastthrift = 0;
         $lastavailablethrifts= 0;
+        $availableThriftsDetails = [];
         
         if(!empty($request->query->get('year'))) {
             $yearSelected = $request->query->get('year');
@@ -44,7 +45,7 @@ class ForecastSummaryController extends AbstractController
                 $lastavailablethrifts += $thriftInDatabase->getBalance();
             }
             $lastthrift += $thriftInDatabase->getBalance();
-
+            $availableThriftsDetails[$thriftInDatabase->getId()] = array('user' => $thriftInDatabase->getUser()->getFirstName(), 'ratio' => $thriftInDatabase->getRatio(), 'init' => $thriftInDatabase->getBalance(),'name' => $thriftInDatabase->getName());
         }   
 
         setlocale(LC_TIME, 'fr_FR');
@@ -72,11 +73,17 @@ class ForecastSummaryController extends AbstractController
                 $lastthrift = $thrifts[$y][$i];
                 $availableThrifts[$y][$i] = $lastavailablethrifts + $diffs[$y][$i];
                 $lastavailablethrifts = $availableThrifts[$y][$i];
+                foreach ($availableThriftsDetails as $key => $value) {
+                    $gap = $availableThriftsDetails[$key]['ratio'] / 100 * $diffs[$y][$i];
+                    $availableThriftsDetails[$key][$y][$i]['gap'] = $gap; 
+                    $availableThriftsDetails[$key][$y][$i]['price'] = $gap + $availableThriftsDetails[$key]['init'];
+                    $availableThriftsDetails[$key]['init'] = $availableThriftsDetails[$key][$y][$i]['price'];
+                }
             }
         }
 
         return $this->render('forecast_summary/index.html.twig', [
-            'monthsWithYear' => $monthsWithYear,
+             'monthsWithYear' => $monthsWithYear,
              'months' => $months,
              'yearSelected' => $yearSelected,
              'years' => $years,
@@ -84,7 +91,8 @@ class ForecastSummaryController extends AbstractController
              'entries' => $entries,
              'diffs' => $diffs,
              'thrifts' => $thrifts,
-             'availableThrifts' => $availableThrifts
+             'availableThrifts' => $availableThrifts,
+             'availableThriftsDetails' => $availableThriftsDetails
         ]);
     }
 }

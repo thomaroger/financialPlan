@@ -28,9 +28,9 @@
   </form>
 </div>
 </div>
-<div class="clearfix"> &nbsp; </div>
 
-   <table class="table table-hover text-center">
+<div class="clearfix"> &nbsp; </div>
+   <table class="table table-hover text-center table-bordered">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -58,7 +58,7 @@
           </tr>
       </tbody>
        <thead>
-        <tr>
+        <tr class="table-secondary">
           <th scope="col">Total</th>
           {% for diff in diffs[yearSelected] %}
                {% set status="success" %}
@@ -71,15 +71,8 @@
               {% endfor %}
         </tr>
          <tbody>
-          <tr>
-          <th scope="row">Epargnes</th>
-            {% for thrift in thrifts[yearSelected] %}
-              <td>
-                {{thrift|format_currency('EUR', locale='en')}}
-              </td>
-              {% endfor %}
-          </tr>
-          <tr>
+         
+          <tr class="table-secondary">
           <th scope="row">Epargnes disponibles</th>
              {% for availableThrift in availableThrifts[yearSelected]  %}
               <td>
@@ -87,9 +80,35 @@
               </td>
               {% endfor %}
           </tr>
+           {% for name, availableThriftDetails in availableThriftsDetails  %}
+          <tr>
+            <th scope="row">{{availableThriftDetails.name}} ({{availableThriftDetails.ratio}}%)</th>
+              {% for entry in availableThriftDetails[yearSelected]  %}
+                <td>
+                  {{entry.price|format_currency('EUR', locale='en')}}<br />
+                   {% set status="success" %}
+                    {% if entry.gap < 1 %}
+                        {% set status="danger" %}
+                    {% endif %}
+                  <span class="text-{{status}}">{{entry.gap|format_currency('EUR', locale='en')}}</span>
+                  </td>
+                </td>
+                {% endfor %}
+            </tr>
+          {% endfor %}
+ <tr class="table-secondary">
+          <th scope="row">Epargnes</th>
+            {% for thrift in thrifts[yearSelected] %}
+              <td>
+                {{thrift|format_currency('EUR', locale='en')}}
+              </td>
+              {% endfor %}
+          </tr>
       </tbody>
   </thead>
   </table>
+<div class="clearfix"> &nbsp; </div>
+<div class="clearfix"> &nbsp; </div>
 <div class="clearfix"> &nbsp; </div>
 
 {% endblock %}

@@ -65,7 +65,7 @@ class ForecastMoneyExpensesController extends AbstractController
 
 
     /**
-     * @Route("/forecast//money/expenses/add", name="app_expenses_add")
+     * @Route("/forecast/money/expenses/add", name="app_expenses_add")
      */
     public function add()
     {
@@ -135,5 +135,32 @@ class ForecastMoneyExpensesController extends AbstractController
         
         return $this->redirectToRoute('app_expenses');
 
+    }
+
+
+    /**
+     * @Route("/forecast/money/expenses/{id}/delete", name="app_expense_delete")
+     */
+    public function delete($id)
+    {
+        $forecastMoneyExpenseInstances = [];
+
+        $expense =$this->getDoctrine()
+            ->getRepository(ForecastMoneyExpense::class)
+            ->findOneByID($id);
+
+        $forecastMoneyExpenseInstances =$this->getDoctrine()
+            ->getRepository(ForecastMoneyExpenseInstance::class)
+            ->findByForecastMoneyExpense($id);
+
+        $manager = $this->getDoctrine()->getManager();
+        foreach ($forecastMoneyExpenseInstances as $forecastMoneyExpenseInstance) {
+            $manager->remove($forecastMoneyExpenseInstance);
+            $manager->flush();
+        }
+        $manager->remove($expense);
+        $manager->flush();
+
+        return $this->redirectToRoute('app_expenses');
     }
 }
