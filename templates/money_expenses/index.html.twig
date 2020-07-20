@@ -99,6 +99,18 @@
             </div>
             </div>
 
+            <div class="form-group col">
+               <div class="input-group-prepend">
+                    <label for="inputGroupSelect02">Vers un compte epargne non disponible  </label>
+                  </div>
+                  <select class="custom-select" id="inputGroupSelect02" name="thriftsNotAvailable">
+                    <option value="0" selected>Choisir un compte epargnes non disponible </option>
+                    {% for thriftsNotAvailable in thriftsNotAvailable %}
+                    <option value="{{thriftsNotAvailable.id}}">{{thriftsNotAvailable.name}} -  {{thriftsNotAvailable.user.firstname}} {{thriftsNotAvailable.user.lastname}} </option>
+                    {% endfor %}
+                  </select> 
+            </div>
+
           <div class="container"> 
     <div class="card">
         <div class="card-header">

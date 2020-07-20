@@ -40,9 +40,15 @@ class ForecastMoneyExpense
     private $date;
 
     /**
-     * @ORM\OneToMany(targetEntity=ForecastMoneyEntryInstance::class, mappedBy="ForecastMoneyEntry")
+     * @ORM\OneToMany(targetEntity=ForecastMoneyExpenseInstance::class, mappedBy="ForecastMoneyExpense")
      */
     private $forecastMoneyExpenseInstances;
+
+     /**
+     * @ORM\ManyToOne(targetEntity=Thrift::class, inversedBy="forecastMoneyExpenses")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thrift;
 
     public function __construct()
     {
@@ -98,6 +104,18 @@ class ForecastMoneyExpense
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getThrift(): ?Thrift
+    {
+        return $this->thrift;
+    }
+
+    public function setThrift(?Thrift $thrift): self
+    {
+        $this->thrift = $thrift;
 
         return $this;
     }

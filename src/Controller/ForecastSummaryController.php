@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\ForecastMoneyExpenseInstance;
+use App\Entity\ForecastMoneyExpense;
 use App\Entity\ForecastMoneyEntryInstance;
 use App\Entity\Thrift;
 
@@ -73,12 +74,36 @@ class ForecastSummaryController extends AbstractController
                 $lastthrift = $thrifts[$y][$i];
                 $availableThrifts[$y][$i] = $lastavailablethrifts + $diffs[$y][$i];
                 $lastavailablethrifts = $availableThrifts[$y][$i];
+                
+
                 foreach ($availableThriftsDetails as $key => $value) {
-                    $gap = $availableThriftsDetails[$key]['ratio'] / 100 * $diffs[$y][$i];
-                    $availableThriftsDetails[$key][$y][$i]['gap'] = $gap; 
-                    $availableThriftsDetails[$key][$y][$i]['price'] = $gap + $availableThriftsDetails[$key]['init'];
-                    $availableThriftsDetails[$key]['init'] = $availableThriftsDetails[$key][$y][$i]['price'];
+                    if ($availableThriftsDetails[$key]['ratio'] > 0 ) {
+                        $gap = $availableThriftsDetails[$key]['ratio'] / 100 * $diffs[$y][$i];
+                        $availableThriftsDetails[$key][$y][$i]['gap'] = $gap; 
+                        $availableThriftsDetails[$key][$y][$i]['price'] = $gap + $availableThriftsDetails[$key]['init'];
+                        $availableThriftsDetails[$key]['init'] = $availableThriftsDetails[$key][$y][$i]['price'];
+                    } else {
+                        $gap = 0;
+                        $expensesForThrifts = $this->getDoctrine()
+                            ->getRepository(ForecastMoneyExpense::class)
+                            ->findBy(array('thrift'=>$key));
+                        
+                        foreach ($expensesForThrifts as $expensesForThrift) {
+                            $expenseByMonthForThrifts = $this->getDoctrine()
+                                ->getRepository(ForecastMoneyExpenseInstance::class)
+                                ->findBy(array('month'=> $i, 'year' => $y, 'forecastMoneyExpense' => $expensesForThrift));
+                            foreach ($expenseByMonthForThrifts as $expenseByMonthForThrift) {
+                                $gap += $expenseByMonthForThrift->getPrice();
+                            }
+                        }
+
+                        $availableThriftsDetails[$key][$y][$i]['gap'] = $gap; 
+                        $availableThriftsDetails[$key][$y][$i]['price'] = $gap + $availableThriftsDetails[$key]['init'];
+                        $availableThriftsDetails[$key]['init'] = $availableThriftsDetails[$key][$y][$i]['price'];
+                       
+                    }
                 }
+
             }
         }
 

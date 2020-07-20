@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
+use App\Entity\Thrift;
 use App\Entity\ForecastMoneyExpense;
 use App\Entity\ForecastMoneyExpenseInstance;
 
@@ -24,6 +25,7 @@ class ForecastMoneyExpensesController extends AbstractController
         $yearSelected = date('Y');
         $expenses = [];
         $count = [];
+
         
         if(!empty($request->query->get('year'))) {
             $yearSelected = $request->query->get('year');
@@ -53,6 +55,12 @@ class ForecastMoneyExpensesController extends AbstractController
             $count[$forecastMoneyExpenseInstance->getYear()][$forecastMoneyExpenseInstance->getMonth()] += $forecastMoneyExpenseInstance->getPrice();
         }
 
+         $thriftsNotAvailable = $this->getDoctrine()
+            ->getRepository(Thrift::class)
+            ->findBy(array('available' => false));
+
+        
+
         return $this->render('money_expenses/index.html.twig', [
              'monthsWithYear' => $monthsWithYear,
              'months' => $months,
@@ -60,6 +68,7 @@ class ForecastMoneyExpensesController extends AbstractController
              'years' => $years,
              'expenses' => $expenses,
              'count' => $count,
+             'thriftsNotAvailable' => $thriftsNotAvailable
         ]);
     }
 
@@ -96,6 +105,13 @@ class ForecastMoneyExpensesController extends AbstractController
         $forecastMoneyExpense->setPrice($datas['price']);
         $forecastMoneyExpense->setRecurrent($recurrent);
         $forecastMoneyExpense->setDate(\DateTime::createFromFormat('d-m-Y', '01-'.$month.'-'.$year));
+
+        if(!empty($datas['thriftsNotAvailable'])) {
+            $thriftNotAvailable = $this->getDoctrine()
+            ->getRepository(Thrift::class)
+            ->findOneByID($datas['thriftsNotAvailable']);
+            $forecastMoneyExpense->setThrift($thriftNotAvailable);
+        }
 
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($forecastMoneyExpense);
