@@ -41,9 +41,9 @@ class DashboardController extends AbstractController
             [
                 'users' => count($users),
                 'thrifts' => count($thrifts),
-                'forecastEntry' => $forecastEntry[0][1],
-                'forecastExpense' => $forecastExpense[0][1],
-                'forecastDiff' => $forecastEntry[0][1] - $forecastExpense[0][1],
+                'forecastEntry' => (float) $forecastEntry[0][1],
+                'forecastExpense' => (float) $forecastExpense[0][1],
+                'forecastDiff' => (float) $forecastEntry[0][1] - (float) $forecastExpense[0][1],
             ]
         );
     }
